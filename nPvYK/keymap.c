@@ -9,6 +9,9 @@ enum custom_keycodes {
   HSV_0_245_245,
   HSV_74_255_206,
   HSV_152_255_255,
+  WIN_CTRL,
+  OVDT_EURO,
+  ASTR_POUND,
 };
 
 
@@ -38,10 +41,10 @@ enum tap_dance_codes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_moonlander(
     KC_ESCAPE,      KC_1,           TD(DANCE_0),    KC_3,           TD(DANCE_1),    KC_5,           KC_HYPR,                                        KC_MEH,         KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_DELETE,      
-    KC_TAB,         KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           ES_OVDT,                                        TD(DANCE_2),    TD(DANCE_3),    TD(DANCE_4),    TD(DANCE_5),    TD(DANCE_6),    TD(DANCE_7),    TD(DANCE_8),    
-    KC_TRANSPARENT, KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           ES_ASTR,                                                                        TD(DANCE_9),    TD(DANCE_10),   TD(DANCE_11),   TD(DANCE_12),   TD(DANCE_13),   TD(DANCE_14),   TD(DANCE_15),   
+    KC_TAB,         KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           OVDT_EURO,                                      TD(DANCE_2),    TD(DANCE_3),    TD(DANCE_4),    TD(DANCE_5),    TD(DANCE_6),    TD(DANCE_7),    TD(DANCE_8),    
+    KC_TRANSPARENT, KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           ASTR_POUND,                                                                     TD(DANCE_9),    TD(DANCE_10),   TD(DANCE_11),   TD(DANCE_12),   TD(DANCE_13),   TD(DANCE_14),   TD(DANCE_15),   
     KC_LEFT_SHIFT,  KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,                                           TD(DANCE_16),   TD(DANCE_17),   TD(DANCE_18),   TD(DANCE_19),   KC_UP,          KC_RIGHT_SHIFT, 
-    MO(2),          CW_TOGG,        KC_TRANSPARENT, KC_LEFT_GUI,    KC_ENTER,       MT(MOD_LALT, KC_APPLICATION),                                                                                                MT(MOD_LCTL, KC_ESCAPE),MO(1),          MO(2),          KC_LEFT,        KC_DOWN,        KC_RIGHT,       
+    MO(2),          CW_TOGG,        KC_TRANSPARENT, KC_LEFT_GUI,    KC_ENTER,       WIN_CTRL,                                                                                                MT(MOD_LCTL, KC_ESCAPE),MO(1),          MO(2),          KC_LEFT,        KC_DOWN,        KC_RIGHT,       
     KC_SPACE,       KC_BSPC,        KC_LEFT_CTRL,                   KC_LEFT_ALT,    KC_TAB,         KC_ENTER
   ),
   [1] = LAYOUT_moonlander(
@@ -99,6 +102,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
             rgblight_mode(1);
             rgblight_sethsv(152,255,255);
+        }
+        return false;
+    case WIN_CTRL:
+        if (record->event.pressed) {
+            register_code(KC_LGUI);
+            register_code(KC_LCTL);
+        } else {
+            unregister_code(KC_LCTL);
+            unregister_code(KC_LGUI);
+        }
+        return false;
+    case OVDT_EURO:
+        if (record->tap.count && record->event.pressed) {
+            tap_code16(ES_OVDT);
+        } else if (record->event.pressed) {
+            tap_code16(ES_EURO);
+        }
+        return false;
+    case ASTR_POUND:
+        if (record->tap.count && record->event.pressed) {
+            tap_code16(ES_ASTR);
+        } else if (record->event.pressed) {
+            tap_code16(ES_POUND);
         }
         return false;
   }

@@ -23,3 +23,5 @@
 #define ES_RCBR ALGR(KC_NUHS)
 #define ES_SCLN S(KC_COMM)
 #define ES_COLN S(KC_DOT)
+#define ES_EURO ALGR(KC_5)
+#define ES_POUND ALGR(S(KC_3))
