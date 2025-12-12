@@ -134,7 +134,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (timer_elapsed(astr_pound_timer) < TAPPING_TERM) {
                 tap_code16(ES_ASTR);  // Tap: output *
             } else {
-                tap_code16(ES_POUND);  // Hold: output £
+                send_unicode_string("£");  // Hold: output £
             }
         }
         return false;

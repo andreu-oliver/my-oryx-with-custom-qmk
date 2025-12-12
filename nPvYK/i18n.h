@@ -24,4 +24,3 @@
 #define ES_SCLN S(KC_COMM)
 #define ES_COLN S(KC_DOT)
 #define ES_EURO ALGR(KC_E)
-#define ES_POUND S(ALGR(KC_3))
