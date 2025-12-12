@@ -65,6 +65,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 
+// State tracking for tap/hold keys
+static uint16_t ovdt_euro_timer;
+static uint16_t astr_pound_timer;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -114,17 +117,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         return false;
     case OVDT_EURO:
-        if (record->tap.count && record->event.pressed) {
-            tap_code16(ES_OVDT);
-        } else if (record->event.pressed) {
-            tap_code16(ES_EURO);
+        if (record->event.pressed) {
+            ovdt_euro_timer = timer_read();
+        } else {
+            if (timer_elapsed(ovdt_euro_timer) < TAPPING_TERM) {
+                tap_code16(ES_OVDT);  // Tap: output ·
+            } else {
+                tap_code16(ES_EURO);  // Hold: output €
+            }
         }
         return false;
     case ASTR_POUND:
-        if (record->tap.count && record->event.pressed) {
-            tap_code16(ES_ASTR);
-        } else if (record->event.pressed) {
-            tap_code16(ES_POUND);
+        if (record->event.pressed) {
+            astr_pound_timer = timer_read();
+        } else {
+            if (timer_elapsed(astr_pound_timer) < TAPPING_TERM) {
+                tap_code16(ES_ASTR);  // Tap: output *
+            } else {
+                tap_code16(ES_POUND);  // Hold: output £
+            }
         }
         return false;
   }
